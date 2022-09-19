@@ -49,6 +49,7 @@ app.get('/cloak', (req, res) => {
             model=${ua?.device.model}`
 
             console.log(url);
+            console.log(ua);
             axios.get(url, {params: {ip: ip, systemName: ua?.os.name, systemVersion: ua?.os.version, model: ua?.device.model}}).then(response => {
                 console.log("RESULT: ", response.data);
                 if(+response.data === 1){
