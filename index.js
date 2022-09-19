@@ -52,6 +52,7 @@ app.get('/cloak', (req, res) => {
             axios.get(
                 url
             ).then(response => {
+                console.log("RESULT: ", response);
                 if(+response === 1){
                     res.send({'status': 1, link: data?.link})
                 }else{
