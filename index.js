@@ -41,17 +41,15 @@ app.get('/cloak', (req, res) => {
         console.log(data);
 
         if(data?.enabled === 1){
-            let url = `
-                ${data?.cloak}?
-                ip=${ip}&
-                systemName=${ua?.os.name}&
-                systemVersion=${ua?.os.version}&
-                model=${ua?.device.model}
-            `
+            let url = `${data?.cloak}`
+            let temp = `
+            ip=${ip}&
+            systemName=${ua?.os.name}&
+            systemVersion=${ua?.os.version}&
+            model=${ua?.device.model}`
+
             console.log(url);
-            axios.get(
-                url
-            ).then(response => {
+            axios.get(url, {params: {ip: ip}}).then(response => {
                 console.log("RESULT: ", response.data);
                 if(+response.data === 1){
                     res.send({'status': 1, link: data?.link})
