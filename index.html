@@ -70,16 +70,6 @@
   </body>
   <script>
     let visit = localStorage.getItem('visit');
-    if(visit){
-      fetch('/cloak').then(response => response.json()).then(res => {
-        if(res.status === 1){
-          window.location.href = res?.link
-        }else{
-          window.location.hash = 'agreeButton'
-        }
-      })
-    }
-
     function onAgreeClick(){
       fetch('/cloak').then(response => response.json()).then(res => {
         if(res.status === 1){
